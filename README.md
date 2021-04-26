@@ -9,6 +9,6 @@ Weather App that displays current and future weather
 ## Features
 * Displays weather of current lcoation at startup
 * Search feature
-*   Input: Address, partial address, latitude/longitude, and US ZIP codes
+  * Input: Address, partial address, latitude/longitude, and US ZIP codes
 * Fahrenheit/Celsius Button
-*   Toggles between fahrenheit and celsius
+  * Toggles between fahrenheit and celsius
