@@ -3,11 +3,11 @@ import requests
 import geocoder
 import datetime
 
-
+# locating current location
 g = geocoder.ip("me")
 currentLocation = g.city
 
-
+# requesting api with both temperature measurements
 def api(currentLocation):
     global measure, response_fah, response_cel, check
     querystring = {"contentType": "json"}
@@ -16,7 +16,6 @@ def api(currentLocation):
                                            "/timeline/" + currentLocation + "?unitGroup=" + measure +
                                     "&key=BFM23YQMJHULDF6R3NZA4YUNB&include=fcst%2Calerts%2Ccurrent",
                                     params=querystring)
-
     measure = "uk"
     response_cel = requests.request("GET", "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services"
                                            "/timeline/" + currentLocation + "?unitGroup=" + measure +
@@ -25,6 +24,7 @@ def api(currentLocation):
     check = "us"
 api(currentLocation)
 
+# current weather condition data
 def current():
     global location, c_temp_fah, c_temp_cel, alerts, measure, c_conditions, data_fah, data_cel
 
@@ -49,7 +49,7 @@ def current():
 
 current()
 
-
+# weekly temperature conditions
 def weekConditions(x):
     condition = data_fah["days"][x]["conditions"]
     return condition
@@ -67,7 +67,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
         MainWindow.setMinimumSize(QtCore.QSize(500, 700))
-        MainWindow.setMaximumSize(QtCore.QSize(500, 700))
+        MainWindow.setMaximumSize(QtCore.QSize(500, 500))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
@@ -104,7 +104,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.location = QtWidgets.QLabel(self.centralwidget)
-        self.location.setGeometry(QtCore.QRect(0, 30, 500, 85))
+        self.location.setGeometry(QtCore.QRect(0, 15, 500, 150))
         font = QtGui.QFont()
         font.setFamily("Leelawadee UI")
         font.setPointSize(48)
@@ -144,7 +144,7 @@ class Ui_MainWindow(object):
         self.alerts.setGeometry(QtCore.QRect(5, 585, 490, 40))
         font = QtGui.QFont()
         font.setFamily("Leelawadee UI")
-        font.setPointSize(10)
+        font.setPointSize(9)
         font.setBold(True)
         font.setWeight(75)
         self.alerts.setFont(font)
@@ -851,7 +851,7 @@ class Ui_MainWindow(object):
         self.locationInput.setPlaceholderText(_translate("MainWindow", "Enter a City"))
         self.setFah()
 
-
+    # sets UI to display temperatures in Fahrenheit
     def setFah(self):
         self.currentTemp.setText(_translate("MainWindow", c_temp_fah + "°F"))
         self.forecastTemp.setText(_translate("MainWindow", str(round(data_fah["days"][0]["temp"])) + "°F"))
@@ -865,7 +865,7 @@ class Ui_MainWindow(object):
         self.forecastTemp_9.setText(_translate("MainWindow", str(round(data_fah["days"][8]["temp"])) + "°F"))
         self.forecastTemp_10.setText(_translate("MainWindow", str(round(data_fah["days"][9]["temp"])) + "°F"))
 
-
+    # sets UI to display temperatures in Celsius
     def setCel(self):
         self.currentTemp.setText(_translate("MainWindow", c_temp_cel + "°C"))
         self.forecastTemp.setText(_translate("MainWindow", str(round(data_cel["days"][0]["temp"])) + "°C"))
@@ -879,7 +879,7 @@ class Ui_MainWindow(object):
         self.forecastTemp_9.setText(_translate("MainWindow", str(round(data_cel["days"][8]["temp"])) + "°C"))
         self.forecastTemp_10.setText(_translate("MainWindow", str(round(data_cel["days"][9]["temp"])) + "°C"))
 
-
+    # sets UI to display weekly conditions
     def setConditions(self):
         self.forecastConditions.setText(_translate("MainWindow", weekConditions(0)))
         self.forecastConditions_2.setText(_translate("MainWindow", weekConditions(1)))
@@ -892,13 +892,13 @@ class Ui_MainWindow(object):
         self.forecastConditions_9.setText(_translate("MainWindow", weekConditions(8)))
         self.forecastConditions_10.setText(_translate("MainWindow", weekConditions(9)))
 
-
+    # sets current weather information to location of user input
     def currentNew(self):
         self.location.setText(_translate("MainWindow", location.title()))
         self.alerts.setText(_translate("MainWindow", "Alerts: " + alerts))
         self.currentConditions.setText(_translate("MainWindow", c_conditions))
 
-
+    # Search button
     def search(self):
         self.boxlocation = self.locationInput.text()
         if self.boxlocation == "":
@@ -910,7 +910,7 @@ class Ui_MainWindow(object):
             self.setConditions()
             self.currentNew()
 
-
+    # Changes temperature measurement when Fahrenheit/Celsius button is pushed
     def pushed(self):
         global check
         if check == "us":
@@ -920,7 +920,7 @@ class Ui_MainWindow(object):
             check = "us"
             self.setFah()
 
-
+    # Converts date to day of the week
     def dayofweek(self, forecastDate):
         date = datetime.datetime.strptime(forecastDate, "%Y-%m-%d")
         day = date.strftime('%A')
