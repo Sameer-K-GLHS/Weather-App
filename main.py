@@ -55,7 +55,7 @@ def weekConditions(x):
     return condition
 
 
-# QT Designer UI designer, converted to python code
+# UI, made with QT Designer(UI designer), then converted to python code
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
